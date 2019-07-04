@@ -17,21 +17,22 @@ const TableName = 'users';
  * @param {*} res http response
  */
 const authenticateUser = async (req, res) => {
-  const { username, password } = req.body;
-  if (!username || !password) {
-    throw badRequestError('Username and password are required.');
+  const { email, password } = req.body;
+  if (!email || !password) {
+    throw badRequestError('Email and password are required.');
   }
-  const Key = { username };
+  const Key = { email };
   const { Item: user } = await dynamoClient.get({ TableName, Key }).promise();
   if (!user) {
-    throw unauthorizedError('Invalid username or password.')
+    throw unauthorizedError('Invalid email or password.')
   }
   const validPassword = await bcrypt.compare(password, user.hash);
   if (!validPassword) {
-    throw unauthorizedError('Invalid username or password');
+    throw unauthorizedError('Invalid email or password');
   }
   // success, generate user token
-  const tokenData = { username };
+  const { userId } = user;
+  const tokenData = { email, userId };
   const tokenOptions = { expiresIn: TOKEN_EXPIRATION };
   const token = await jwt.sign(tokenData, process.env.MY_BOOKS_API_TOKEN_SECRET, tokenOptions);
   return res.json(responses.successData({ token }));

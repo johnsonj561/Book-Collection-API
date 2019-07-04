@@ -4,7 +4,6 @@ AWS.config.update({ region });
 
 const dynamoClient = new AWS.DynamoDB.DocumentClient();
 
-
 module.exports = {
-  dynamoClient,
+  dynamoClient
 }

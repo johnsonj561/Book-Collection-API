@@ -1,14 +1,11 @@
 const express = require('express')
 const uuid = require('uuid');
-const AWS = require('aws-sdk');
-const bcrypt = require('bcrypt');
-const dynamoClient = require('../../../utils/dynamo').dynamoClient;
-const { wrapAsyncRoute, badRequestError } = require('../../../utils/error-handling');
+const { dynamoClient } = require('../../../utils/dynamo');
+const { wrapAsyncRoute, notFoundError } = require('../../../utils/error-handling');
 const responses = require('../../../utils/responses');
+const { validateBook } = require('./model');
 
-const SALT_ROUNDS = 10;
-const TableName = 'users';
-
+const TableName = 'books';
 
 /**
  * addBook - adds new book to user's book collection
@@ -16,16 +13,36 @@ const TableName = 'users';
  * @param {*} res http response
  */
 const addBook = async (req, res) => {
-  return res.json(responses.successMessage(`Book created`));
+  await validateBook(req.body);
+  const { userId } = req.decoded;
+  const createDate = new Date().toUTCString();
+  const bookId = uuid.v4();
+  const Item = { userId, bookId, ...req.body, createDate };
+  const params = { TableName, Item };
+  await dynamoClient.put(params).promise();
+  return res.json(responses.successData(Item));
 }
 
+/**
+ * getBook - returns book with bookId from user's collection
+ * @param {*} req http request
+ * @param {*} res http response
+ */
 const getBook = async (req, res) => {
-  return res.json(responses.successMessage('Success!'));
+  const { bookId } = req.params;
+  const { userId } = req.decoded;
+  const Key = { userId, bookId };
+  const params = { TableName, Key };
+  const { Item: book } = await dynamoClient.get(params).promise();
+  if (!book) {
+    throw notFoundError('Book not found');
+  }
+  return res.json(responses.successData(book));
 }
 
 
 const bookRouter = express.Router()
-bookRouter.get('/', wrapAsyncRoute(getBook));
+bookRouter.get('/:bookId', wrapAsyncRoute(getBook));
 bookRouter.post('/', wrapAsyncRoute(addBook));
 
 module.exports = bookRouter;

@@ -1,6 +1,7 @@
 const createError = require('http-errors')
 
-const errorWithCode = (code) => (message) => createError(code, message);
+const errorOptions = { safeError: true };
+const errorWithCode = (code) => (message) => createError(code, message, errorOptions);
 
 /**
  * wrapAsyncRoute appends Promise.catch to wrapped function call

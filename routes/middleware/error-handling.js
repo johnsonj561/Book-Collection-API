@@ -1,4 +1,6 @@
 const express = require('express');
+const _ = require('lodash');
+const { badRequestError } = require('../../utils/error-handling');
 const router = express.Router();
 
 const joiErrorMiddleware = (error, req, res, next) => {
@@ -11,8 +13,15 @@ const joiErrorMiddleware = (error, req, res, next) => {
 }
 
 const errorMiddleware = (error, req, res, next) => {
-  const { statusCode = 500, status = 'ServerError', message } = error;
-  return res.status(statusCode).json({ success: false, status, message });
+  const { safeError, statusCode, status = 'ServerError', message } = error;
+  if (safeError && statusCode) {
+    return res.status(statusCode).json({ success: false, status, message });
+  }
+  return res.status(statusCode).json({
+    success: false,
+    status,
+    message: 'Unexpected error processing request'
+  });
 }
 
 module.exports = {

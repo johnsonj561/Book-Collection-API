@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "@hapi/joi": "^15.0.3",
+    "amazon-product-api": "^0.4.4",
     "aws-sdk": "^2.479.0",
     "bcrypt": "^3.0.6",
     "cors": "^2.8.5",

@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-const userRoutes = require('./routes/public/users');
+const registrationRoutes = require('./routes/public/registration');
 const authRoutes = require('./routes/public/auth');
 const bookRoutes = require('./routes/private/books');
 const authMiddleware = require('./routes/middleware/decode-token');
@@ -16,7 +16,7 @@ app.use(cors());
 app.use(express.json());
 
 // public routes
-app.use('/user', userRoutes);
+app.use('/register', registrationRoutes);
 app.use('/auth', authRoutes);
 
 // authentication middleware
