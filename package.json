@@ -12,7 +12,7 @@
     "@hapi/joi": "^15.0.3",
     "amazon-product-api": "^0.4.4",
     "aws-sdk": "^2.479.0",
-    "bcrypt": "^3.0.6",
+    "bcrypt": "^5.0.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "http-errors": "^1.7.3",
