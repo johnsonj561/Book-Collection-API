@@ -11,7 +11,7 @@
   "dependencies": {
     "@hapi/joi": "^15.0.3",
     "amazon-product-api": "^0.4.4",
-    "aws-sdk": "^2.479.0",
+    "aws-sdk": "^2.814.0",
     "bcrypt": "^3.0.6",
     "cors": "^2.8.5",
     "express": "^4.17.1",
