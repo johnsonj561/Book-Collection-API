@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@hapi/joi": "^15.0.3",
+    "@hapi/joi": "^15.1.1",
     "amazon-product-api": "^0.4.4",
     "aws-sdk": "^2.479.0",
     "bcrypt": "^3.0.6",
